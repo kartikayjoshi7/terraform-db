@@ -1,5 +1,5 @@
 resource "aws_elasticache_cluster" "redis" {
-  cluster_id         = "redis.${var.ENV}"
+  cluster_id         = "redis-${var.ENV}"
   engine             = "redis"
   node_type          = "cache.t3.micro"
   num_cache_nodes    = 1
@@ -50,7 +50,7 @@ output "test" {
 
 resource "aws_route53_record" "redis" {
   zone_id = data.terraform_remote_state.vpc.outputs.PRIVATE_HOSTED_ZONE_ID
-  name    = "mysql-${var.ENV}.roboshop.internal"
+  name    = "redis-${var.ENV}.roboshop.internal"
   type    = "CNAME"
   ttl     = 300
   records = [aws_elasticache_cluster.redis.cache_nodes[0].address]
