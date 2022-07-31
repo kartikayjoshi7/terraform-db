@@ -58,7 +58,6 @@ resource "aws_security_group" "mysql" {
 
 resource "null_resource" "mysql-schema" {
   provisioner "local-exec" {
-    interpreter = ["/bin/bash" ,"-c"],
     command = <<-EOT
 sudo yum install mariadb -y
 curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
