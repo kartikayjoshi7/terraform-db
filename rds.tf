@@ -65,7 +65,7 @@ resource "aws_route53_record" "mysql" {
 
 resource "null_resource" "mysql-schema" {
   provisioner "local-exec" {
-    command = <<-EOT
+    command = <<-
 sudo yum install mariadb -y
 curl -s -L -o /tmp/mysql.zip "https://github.com/roboshop-devops-project/mysql/archive/main.zip"
 cd /tmp
@@ -74,6 +74,3 @@ cd mysql-main
 mysql -h ${aws_db_instanace.default.address} -u${nonsensitive(jsondecode(data.aws_secretsmanager_secret_version.dev-secrets.secret_string)["RDS_MYSQL_USER"])} -p${nonsensitive(jsondecode(data.aws_secretsmanager_secret_version.dev-secrets.secret_string)["RDS_MYSQL_PASS"])} <shipping.sql
   }
 }
-
-
-
