@@ -10,7 +10,7 @@ resource "aws_elasticache_cluster" "redis" {
 }
 
 resource "aws_elasticache_subnet_group" "subnet-group" {
-  name       = "redis.${var.ENV}"
+  name       = "redis-${var.ENV}"
   subnet_ids = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS
 }
 
