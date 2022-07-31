@@ -1,12 +1,11 @@
 resource "aws_elasticache_cluster" "redis" {
-  cluster_id           = "redis.${var.ENV}"
-  engine               = "redis"
-  node_type            = "cache.t3.micro"
-  num_cache_nodes      = 1
-  parameter_group_name = "default.redis6.x"
-  engine_version       = "6.2"
-  port                 = 6379
-  subnet_group_name = aws_elasticache_subnet_group.subnet-group.name
+  cluster_id         = "redis.${var.ENV}"
+  engine             = "redis"
+  node_type          = "cache.t3.micro"
+  num_cache_nodes    = 1
+  engine_version     = "6.x"
+  port               = 6379
+  subnet_group_name  = aws_elasticache_subnet_group.subnet-group.name
   security_group_ids = [aws_security_group.redis.id]
 }
 
@@ -22,15 +21,14 @@ resource "aws_security_group" "redis" {
   vpc_id      = data.terraform_remote_state.vpc.outputs.VPC_ID
 
   ingress {
-    description      = "APP"
-    from_port        = 6379
-    to_port          = 6379
-    protocol         = "tcp"
-    cidr_blocks      = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNET_CIDR
+    description = "APP"
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNET_CIDR
 
   }
 
-  }
 
   egress {
     from_port        = 0
@@ -44,5 +42,6 @@ resource "aws_security_group" "redis" {
     Name = "sg_redis_${var.ENV}"
   }
 }
+
 
 
