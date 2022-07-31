@@ -52,6 +52,13 @@ resource "aws_security_group" "mysql" {
   }
 }
 
+resource "aws_route53_record" "mysql" {
+  zone_id = data.terraform_remote_state.vpc.outputs.PRIVATE_HOSTED_ZONE_ID
+  name    = "mysql-${var.ENV}.roboshop.internal"
+  type    = "CNAME"
+  ttl     = 300
+  records = [aws_db_instance.default.address]
+}
 
 
 
@@ -67,19 +74,6 @@ cd mysql-main
 mysql -h ${aws_db_instanace.default.address} -u${nonsensitive(jsondecode(data.aws_secretsmanager_secret_version.dev-secrets.secret_string)["RDS_MYSQL_USER"])} -p${nonsensitive(jsondecode(data.aws_secretsmanager_secret_version.dev-secrets.secret_string)["RDS_MYSQL_PASS"])} <shipping.sql
   }
 }
-
-
-resource "aws_route53_record" "mysql" {
-  zone_id = data.terraform_remote_state.vpc.outputs.PRIVATE_HOSTED_ZONE_ID
-  name    = "mysql-${var.ENV}.roboshop.internal"
-  type    = "CNAME"
-  ttl     = 300
-  records = [aws_db_instanace.default.address]
-}
-
-
-
-
 
 
 
